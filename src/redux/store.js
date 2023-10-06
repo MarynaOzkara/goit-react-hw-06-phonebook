@@ -18,7 +18,7 @@ const reducer = combineReducers({
   filter: filterReduser,
 });
 const persistConfig = {
-  key: 'root',
+  key: 'PhoneBook',
   storage,
   blacklist: ['filter'],
 };
