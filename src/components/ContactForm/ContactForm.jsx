@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlise';
+import { getContacts } from 'redux/selectors';
 import {
   FormWrap,
   InputWrap,
@@ -7,10 +11,9 @@ import {
   Button,
 } from './ContactForm. styled';
 
-const ContactForm = ({ onSubmit }) => {
-  //   const { contacts } = useSelector(store => store);
-  //   console.log(contacts);
-  //   const dispatch = useDispatch();
+const ContactForm = () => {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -31,8 +34,15 @@ const ContactForm = ({ onSubmit }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    const userAlreadyExist = contacts.find(
+      el => el.name.toLowerCase() === name.toLowerCase()
+    );
+    if (userAlreadyExist) {
+      Notify.warning('Contact is alresdy exist!');
+      return;
+    }
+    dispatch(addContact({ name, number }));
 
-    onSubmit({ name, number });
     setName('');
     setNumber('');
   };
